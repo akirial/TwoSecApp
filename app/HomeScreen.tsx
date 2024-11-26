@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Button, Text, StyleSheet } from "react-native";
 import * as DocumentPicker from "expo-document-picker"; // For Expo
 import { Amplify } from "aws-amplify"; // Correct import for Amplify
-import { Storage } from "@aws-amplify/storage"; // Correct import for Storage
+//import { Storage } from "@aws-amplify/storage"; // Correct import for Storage
 import amplifyConfig from '../amplify_outputs.json'; // Your amplify config file
 
 // Configure AWS Amplify with the information from amplify_outputs.json
@@ -13,12 +13,7 @@ Amplify.configure({
     user_pool_id: amplifyConfig.auth.user_pool_id,
     user_pool_client_id: amplifyConfig.auth.user_pool_client_id,
   },
-  Storage: {
-    AWSS3: {
-      bucket: amplifyConfig.Storage.bucket,
-      region: amplifyConfig.Storage.region,
-    },
-  },
+  
 });
 
 const HomeScreen = ({ navigation }: any) => {
