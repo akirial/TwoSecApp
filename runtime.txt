@@ -1,1 +1,1 @@
-echo "nodejs 20.x" > runtime.txt
+nodejs 20.x
