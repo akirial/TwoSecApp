@@ -1,19 +1,29 @@
 import React, { useState } from "react";
 import { View, Button, Text, StyleSheet } from "react-native";
 import * as DocumentPicker from "expo-document-picker"; // For Expo
-import { Amplify } from "aws-amplify"; // Correct import for Amplify
-//import { Storage } from "@aws-amplify/storage"; // Correct import for Storage
-import amplifyConfig from '../amplify_outputs.json'; // Your amplify config file
+import { Amplify, Storage } from "@aws-amplify/core"; // Correct imports
+import amplifyConfig from "../amplify_outputs.json"; // Your amplify config file
 
 // Configure AWS Amplify with the information from amplify_outputs.json
 Amplify.configure({
   auth: {
-    identity_pool_id: amplifyConfig.auth.identity_pool_id,
-    aws_region: amplifyConfig.auth.aws_region,
-    user_pool_id: amplifyConfig.auth.user_pool_id,
-    user_pool_client_id: amplifyConfig.auth.user_pool_client_id,
+    user_pool_id: amplifyConfig.auth.user_pool_id, // User Pool ID from your config
+    user_pool_client_id: amplifyConfig.auth.user_pool_client_id, // User Pool Client ID from your config
+    identity_pool_id: amplifyConfig.auth.identity_pool_id, // Identity Pool ID from your config
+    aws_region: amplifyConfig.auth.aws_region, // AWS region from your config
+    mandatorySignIn: false, // Adjust based on your app's auth flow
+    authenticationFlowType: "USER_SRP_AUTH", // Default authentication flow for Cognito User Pools
+    standardAttributes: {
+      email: true, // Mark email as a required standard attribute
+    },
+    usernameAttributes: ["email"], // User login attribute (email in this case)
+    mfaMethods: [], // No MFA enabled, adjust if needed
   },
-  
+  storage: {
+    bucket: amplifyConfig.storage.bucketName, // Bucket name from your config
+    region: amplifyConfig.storage.region, // Region from your config
+    identityPoolId: amplifyConfig.auth.identity_pool_id, // Identity pool ID from your config
+  },
 });
 
 const HomeScreen = ({ navigation }: any) => {
@@ -25,7 +35,7 @@ const HomeScreen = ({ navigation }: any) => {
   const pickFile = async () => {
     try {
       const result = await DocumentPicker.getDocumentAsync({
-        type: "*/*", // You can filter to only videos by using mime types like "video/*"
+        type: "video/*", // Filter for video files
         copyToCacheDirectory: false,
       });
 
@@ -37,7 +47,7 @@ const HomeScreen = ({ navigation }: any) => {
     }
   };
 
-  // Function to upload the video to AWS S3
+  // Function to upload the video to AWS S3 using uploadData
   const uploadFile = async () => {
     if (!fileUri) return;
 
@@ -48,6 +58,7 @@ const HomeScreen = ({ navigation }: any) => {
     const fileName = fileUri.split("/").pop();
     const key = `videos/${Date.now()}_${fileName}`;
 
+    // Create the file object with the necessary data
     const file = {
       uri: fileUri,
       name: fileName,
@@ -55,7 +66,8 @@ const HomeScreen = ({ navigation }: any) => {
     };
 
     try {
-      const uploadResult = await Storage.put(key, file, {
+      // Upload the file using uploadData
+      const result = await Storage.uploadData(key, file, {
         progressCallback: (progress) => {
           const progressPercentage = Math.round(
             (progress.loaded / progress.total) * 100
@@ -64,7 +76,7 @@ const HomeScreen = ({ navigation }: any) => {
         },
       });
 
-      console.log("File uploaded successfully: ", uploadResult);
+      console.log("File uploaded successfully: ", result);
     } catch (error) {
       console.error("Upload error: ", error);
     } finally {
