@@ -36,7 +36,7 @@ const schema = a.schema({
     owner: a.belongsTo('User', 'ownerId'),
     likes: a.integer().default(0),
     uploadedAt: a.datetime().default(getCurrentDateTime()),
-    videoComments: a.hasMany('Comment','commentId')
+    videoComments: a.hasMany('Comment','videoOwnerId')
      // Many-to-many through a join table (Post-Tags)
   }).authorization(allow => [allow.guest()]),
 
@@ -58,6 +58,7 @@ const schema = a.schema({
   Comment: a.model({
     commentId: a.id().required(),
     commentOwnerId: a.id(),
+    videoOwnerId: a.id(),
     content: a.string(),
     commentOwner: a.belongsTo('User','commentOwnerId'),
     video: a.belongsTo('Video', 'videoId'),
