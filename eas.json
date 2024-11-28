@@ -1,0 +1,15 @@
+{
+    "build": {
+      "production": {
+        "workflow": "managed",
+        "distribution": "store",
+        "ios": {
+          "buildType": "release"
+        },
+        "android": {
+          "buildType": "release"
+        }
+      }
+    }
+  }
+  
