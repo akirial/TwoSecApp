@@ -6,12 +6,51 @@ adding a new "isDone" field as a boolean. The authorization rule below
 specifies that any unauthenticated user can "create", "read", "update", 
 and "delete" any "Todo" records.
 =========================================================================*/
+
+import moment from 'moment';
+
+function getCurrentDateTime() {
+  return moment().toISOString();  // Returns the current date-time in ISO 8601 format
+}
+
 const schema = a.schema({
-  Todo: a
-    .model({
-      content: a.string(),
-    })
-    .authorization((allow) => [allow.guest()]),
+  User: a.model({
+    userId: a.id().required(),
+    username: a.string().required(),
+    email: a.email().required(),
+    name: a.string(),
+    profilePictureUrl: a.url(),
+    
+    
+    friends: a.hasMany('User','userId'),
+    comments: a.hasMany('Comment', 'commentOwnerId'),
+    videos: a.hasMany('Video', 'ownerId'), // a user has many friends
+  }).identifier(['userId']),
+
+  Video: a.model({
+    videoId: a.id().required(),
+    ownerId: a.id().required(),
+    title: a.string(),
+    description: a.string(),
+    videoUrl: a.url().required(),
+    owner: a.belongsTo('User', 'ownerId'),
+    likes: a.integer().default(0),
+    uploadedAt: a.datetime().default(getCurrentDateTime()),
+    videoComments: a.hasMany('Comment','commentId')
+     // Many-to-many through a join table (Post-Tags)
+  }),
+
+ 
+
+  Comment: a.model({
+    commentId: a.id().required(),
+    commentOwnerId: a.id(),
+    content: a.string(),
+    commentOwner: a.belongsTo('User','commentId'),
+    video: a.belongsTo('Video', 'videoId'),
+    createdAt: a.datetime().default(getCurrentDateTime()),
+     
+  }),
 });
 
 export type Schema = ClientSchema<typeof schema>;
