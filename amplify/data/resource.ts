@@ -25,7 +25,7 @@ const schema = a.schema({
     friends: a.hasMany('User','userId'),
     comments: a.hasMany('Comment', 'commentOwnerId'),
     videos: a.hasMany('Video', 'ownerId'), // a user has many friends
-  }).identifier(['userId']),
+  }).identifier(['userId']).authorization(allow => [allow.guest()]),
 
   Video: a.model({
     videoId: a.id().required(),
@@ -38,7 +38,7 @@ const schema = a.schema({
     uploadedAt: a.datetime().default(getCurrentDateTime()),
     videoComments: a.hasMany('Comment','commentId')
      // Many-to-many through a join table (Post-Tags)
-  }),
+  }).authorization(allow => [allow.guest()]),
 
  
 
@@ -50,7 +50,7 @@ const schema = a.schema({
     video: a.belongsTo('Video', 'videoId'),
     createdAt: a.datetime().default(getCurrentDateTime()),
      
-  }),
+  }).authorization(allow => [allow.guest()]),
 });
 
 export type Schema = ClientSchema<typeof schema>;
