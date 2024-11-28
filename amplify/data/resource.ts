@@ -61,7 +61,8 @@ const schema = a.schema({
     videoOwnerId: a.id(),
     content: a.string(),
     commentOwner: a.belongsTo('User','commentOwnerId'),
-    video: a.belongsTo('Video', 'videoId'),
+    vidoeOwnerId: a.belongsTo('Video', 'videoOwnerId'),
+    
     createdAt: a.datetime().default(getCurrentDateTime()),
      
   }).authorization(allow => [allow.guest()]),
