@@ -14,6 +14,8 @@ function getCurrentDateTime() {
 }
 
 const schema = a.schema({
+ 
+ 
   User: a.model({
     userId: a.id().required(),
     username: a.string().required(),
@@ -22,10 +24,12 @@ const schema = a.schema({
     profilePictureUrl: a.url(),
     
     
-    friends: a.hasMany('Friend','userId'),
+    friends: a.hasMany('Friend','friendOf'),
     comments: a.hasMany('Comment', 'commentOwnerId'),
     videos: a.hasMany('Video', 'ownerId'), // a user has many friends
   }).identifier(['userId']).authorization(allow => [allow.guest()]),
+
+
 
   Video: a.model({
     videoId: a.id().required(),
@@ -43,10 +47,8 @@ const schema = a.schema({
   Friend: a.model({
 
       id: a.id(),
-      userId: a.id(),
-      friendId: a.id(),
-      user: a.belongsTo('User', 'userId'),
-      friendUser: a.belongsTo('User', 'friendId')
+      friendOf: a.id(),  
+      friendUser: a.belongsTo('User', 'friendOf')
 
 
 
@@ -61,7 +63,7 @@ const schema = a.schema({
     videoOwnerId: a.id(),
     content: a.string(),
     commentOwner: a.belongsTo('User','commentOwnerId'),
-    vidoeOwnerId: a.belongsTo('Video', 'videoOwnerId'),
+    videoOwner: a.belongsTo('Video', 'videoOwnerId'),
     
     createdAt: a.datetime().default(getCurrentDateTime()),
      
