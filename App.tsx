@@ -9,6 +9,16 @@ import HomeScreen from "./app/HomeScreen";
 import LoginScreen from "./app/LoginScreen";
 import Feed from "./app/Feed";
 
+
+
+
+import { Amplify } from 'aws-amplify';
+import outputs from './amplify_outputs.json';
+
+Amplify.configure(outputs);
+
+
+
 // Create the Stack and Bottom Tabs Navigators
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();

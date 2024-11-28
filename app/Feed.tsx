@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, View, Text, StyleSheet, Alert, Image } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { Storage } from 'aws-amplify'; // For Amplify Gen 2
+//import { Storage } from 'aws-amplify'; // For Amplify Gen 2
 import { uploadData } from 'aws-amplify/storage';
 // Utility to convert URI to Blob
 const uriToBlob = async (uri: string): Promise<Blob> => {
