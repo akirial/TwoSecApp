@@ -8,26 +8,13 @@ import amplifyConfig from "../amplify_outputs.json"; // Your amplify config file
 
 
 const HomeScreen = ({ navigation }: any) => {
-  const [fileUri, setFileUri] = useState<string | null>(null);
-  const [uploading, setUploading] = useState<boolean>(false);
-  const [uploadProgress, setUploadProgress] = useState<number>(0);
+ 
 
   
 
   return (
     <View style={styles.container}>
-      <Text>Welcome to the Home Screen!</Text>
-      <Button title="Go to Login" onPress={() => navigation.navigate("Login")} />
-
-      <View style={styles.uploadContainer}>
-        <Button title="Pick a File"  />
-        {fileUri && <Text style={styles.fileUriText}>Selected File: {fileUri}</Text>}
-        {uploading ? (
-          <Text>Uploading... {uploadProgress}%</Text>
-        ) : (
-          <Button title="Upload File"  />
-        )}
-      </View>
+     
     </View>
   );
 };
