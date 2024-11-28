@@ -59,7 +59,7 @@ const schema = a.schema({
     commentId: a.id().required(),
     commentOwnerId: a.id(),
     content: a.string(),
-    commentOwner: a.belongsTo('User','commentId'),
+    commentOwner: a.belongsTo('User','commentOwnerId'),
     video: a.belongsTo('Video', 'videoId'),
     createdAt: a.datetime().default(getCurrentDateTime()),
      
