@@ -22,7 +22,7 @@ const schema = a.schema({
     profilePictureUrl: a.url(),
     
     
-    friends: a.hasMany('User','userId'),
+    friends: a.hasMany('Friend','userId'),
     comments: a.hasMany('Comment', 'commentOwnerId'),
     videos: a.hasMany('Video', 'ownerId'), // a user has many friends
   }).identifier(['userId']).authorization(allow => [allow.guest()]),
@@ -40,6 +40,19 @@ const schema = a.schema({
      // Many-to-many through a join table (Post-Tags)
   }).authorization(allow => [allow.guest()]),
 
+  Friend: a.model({
+
+      id: a.id(),
+      userId: a.id(),
+      friendId: a.id(),
+      user: a.belongsTo('User', 'userId'),
+      friendUser: a.belongsTo('User', 'friendId')
+
+
+
+
+
+  }).authorization(allow => [allow.guest()]),
  
 
   Comment: a.model({
