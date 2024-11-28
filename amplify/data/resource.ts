@@ -46,9 +46,10 @@ const schema = a.schema({
 
   Friend: a.model({
 
-      id: a.id(),
+      
       friendOf: a.id(),  
-      friendUser: a.belongsTo('User', 'friendOf')
+      friendUser: a.belongsTo('User', 'friendOf'),
+      id: a.id(),
 
 
 
@@ -67,7 +68,7 @@ const schema = a.schema({
     
     createdAt: a.datetime().default(getCurrentDateTime()),
      
-  }).authorization(allow => [allow.guest()]),
+  }).authorization(allow => [allow.guest()])
 });
 
 export type Schema = ClientSchema<typeof schema>;

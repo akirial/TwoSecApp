@@ -10,13 +10,15 @@ import { v4 as uuidv4 } from 'uuid';
 
 
 import { generateClient } from 'aws-amplify/data';
-import { data, type Schema } from '../amplify/data/resource'
+import type {Schema } from '../amplify/data/resource'
+
+
+
+
 
 
 
 const client = generateClient<Schema>();
-
-
 
 
 
@@ -142,18 +144,34 @@ function Feed() {
 
 
 
-    const { errors, data: newVideo } = await client.models.Video.create({
-          videoId: uuidv4(),
-          title: "No Title",
-          description: "No Description",
-          videoUrl: `s3://amplify-twosecapp-eleva-s-amplifyteamdrivebucket28-fpzgdu4hit7l/video-submissions/${filename}`,
-          ownerId: "bodytree",
-          
-          
-          
-     // Many-to-many through a join table (Post-Tags)
-        })
+        
+        try {
+          // Attempt to create a new video entry
+          const { errors, data: newVideo } = await client.models.Video.create({
+            videoId: uuidv4(),
+            title: "No Title",
+            description: "No Description",
+            videoUrl: `s3://amplify-twosecapp-eleva-s-amplifyteamdrivebucket28-fpzgdu4hit7l/video-submissions/${filename}`,
+            ownerId: "bodytree",
+          });
+        
+          // Check for API-specific errors
+          if (errors) {
+            console.error("API Errors during video creation:", errors);
+            Alert.alert("Error", "There was an issue creating the video entry.");
+            return; // Exit if errors were returned
+          }
+        
+          console.log("Video entry created successfully:", newVideo);
+          Alert.alert("Success", "Video entry created successfully!");
+        } catch (error) {
+          // Catch unexpected runtime errors
+          console.error("Unexpected error during video creation:", error);
+          Alert.alert("Error", "An unexpected error occurred.");
+        }
+        
 
+           
 
 
 
