@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, View, Text, StyleSheet, Alert, Image } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 //import { Storage } from 'aws-amplify'; // For Amplify Gen 2
-import { uploadData } from 'aws-amplify/storage';
+import { uploadData, list } from 'aws-amplify/storage';
 // Utility to convert URI to Blob
 import { v4 as uuidv4 } from 'uuid';
 
@@ -110,6 +110,7 @@ function Feed() {
           data: blob,
         }).result;
         console.log('Succeeded: ', result);
+        
         Alert.alert("File Uplodaed Succesfully");
       } catch (error) {
         console.log('Error : ', error);
@@ -146,8 +147,12 @@ function Feed() {
         console.log('Succeeded: ', result);
         Alert.alert("File Uplodaed Succesfully");
 
+        const ampUrl = await list({
+          path: result.path,
+          // Alternatively, path: ({identityId}) => `album/{identityId}/photos/`
+        });
 
-
+          console.log(ampUrl)
         
         try {
           // Attempt to create a new video entry
@@ -155,7 +160,7 @@ function Feed() {
             videoId: uuidv4(),
             title: "No Title",
             description: "No Description",
-            videoUrl: `s3://amplify-twosecapp-eleva-s-amplifyteamdrivebucket28-fpzgdu4hit7l/video-submissions/${filename}`,
+            videoUrl: `https://amplify-twosecapp-eleva-s-amplifyteamdrivebucket28-fpzgdu4hit7l.s3.us-east-2.amazonaws.com/video-submissions/${filename}`,
             ownerId: "bodytree",
           });
         
@@ -191,6 +196,11 @@ function Feed() {
       Alert.alert('Error', 'An error occurred during image upload.');
     }
   };
+
+
+
+
+  
 
   return (
     <View style={styles.container}>
