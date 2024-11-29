@@ -4,10 +4,6 @@ import { useRouter } from "expo-router";
 import { Amplify } from "aws-amplify";
 import { Authenticator, useAuthenticator } from "@aws-amplify/ui-react-native";
 
-import { Amplify } from 'aws-amplify';
-import outputs from './amplify_outputs.json';
-
-Amplify.configure(outputs);
 
 const SignOutButton = () => {
   const { signOut } = useAuthenticator();
