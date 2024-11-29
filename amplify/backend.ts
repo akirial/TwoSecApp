@@ -11,7 +11,7 @@ const backend = defineBackend({
 backend.addOutput({
   storage: {
     aws_region: "us-east-2",
-    bucket_name: "amplify-twosecapp-eleva-s-amplifyteamdrivebucket28-fpzgdu4hit7l "
+    bucket_name: "twosecawasbucketappforme"
   },
 });
 
