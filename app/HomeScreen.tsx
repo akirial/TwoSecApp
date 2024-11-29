@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Button, Text, StyleSheet } from "react-native";
 import {  FlatList,  ActivityIndicator } from "react-native";
 import * as DocumentPicker from "expo-document-picker"; // Import from expo-document-picker
-//import { Amplify, Storage } from "aws-amplify"; // AWS Amplify for uploading
+import { Amplify } from "aws-amplify"; // AWS Amplify for uploading
 import amplifyConfig from "../amplify_outputs.json"; // Your amplify config file
 import { Video, ResizeMode } from "expo-av";
 // Initialize Amplify
@@ -10,6 +10,10 @@ import { Video, ResizeMode } from "expo-av";
 
 import { generateClient } from 'aws-amplify/data';
 import { type Schema } from '../amplify/data/resource';
+
+import outputs from '../amplify_outputs.json';
+Amplify.configure(outputs);
+
 
 const client = generateClient<Schema>();
 
@@ -84,7 +88,7 @@ const renderVideoItem = ({ item }: { item: any }) => (
 
     
     <Video
-  source={{ uri: item.videoUrl }}
+  source={{ uri: "item.videoUrl" }}
   style={styles.video}
   useNativeControls
   resizeMode={ResizeMode.CONTAIN}

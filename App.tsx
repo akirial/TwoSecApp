@@ -12,6 +12,9 @@ import Feed from "./app/Feed";
 import { Amplify } from 'aws-amplify';
 import outputs from './amplify_outputs.json';
 
+
+Amplify.configure(outputs);
+
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -21,7 +24,7 @@ const App = () => {
   useEffect(() => {
     try {
       // Initialize Amplify with the configuration from the amplify_outputs.json
-      Amplify.configure(outputs);
+      
 
       // Optionally, check if the configuration is working by checking the user
       
