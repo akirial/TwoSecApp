@@ -78,24 +78,28 @@ if (error) {
 }
 
 const renderVideoItem = ({ item }: { item: any }) => (
-  <View style={styles.videoItem}>
-    <Text style={styles.videoTitle}>{item.title || "Untitled Video"}</Text>
+  <View style={styles.videoItem} >
+    
+
+    
+    <Video
+  source={{ uri: item.videoUrl }}
+  style={styles.video}
+  useNativeControls
+  resizeMode={ResizeMode.COVER}
+  isLooping
+  onError={(e) => console.log('Video error:', e)}
+  onLoad={(e) => console.log('Video loaded:', e)}
+/>
+
+
+<Text style={styles.videoTitle}>{item.title || "Untitled Video"}</Text>
     <Text style={styles.videoDetails}>Video ID: {item.videoId}</Text>
     <Text style={styles.videoDetails}>Owner ID: {item.ownerId}</Text>
     <Text style={styles.videoDetails}>Video Url: {item.videoUrl}</Text>
     <Text style={styles.videoDetails}>Video Url: {item.uploadedAt}</Text>
     
 
-    
-    <Video
-  source={{ uri: "item.videoUrl" }}
-  style={styles.video}
-  useNativeControls
-  resizeMode={ResizeMode.CONTAIN}
-  isLooping
-  onError={(e) => console.log('Video error:', e)}
-  onLoad={(e) => console.log('Video loaded:', e)}
-/>
 
   </View>
 );
@@ -112,8 +116,12 @@ return (
 
 const styles = StyleSheet.create({
   video: {
-    width: "100%", // Adjust to fit your layout
-    height: 200,   // Set an appropriate height
+    width: "90%", // Adjust to fit your layout
+    height: 500,   // Set an appropriate height
+     flex: 1,
+  justifyContent: "center",
+  alignItems: "center",
+  marginTop: 20
   },
 
 
@@ -139,7 +147,18 @@ videoItem: {
   marginBottom: 20,
   padding: 10,
   backgroundColor: "#f9f9f9",
-  borderRadius: 10,
+  borderRadius: 1,
+  borderColor: "#000000",
+    // Added border width,
+    // Shadow for iOS
+    shadowColor: "#000000",
+    shadowOffset: { width: 0, height: 4 },  // Adjust shadow position
+    shadowOpacity: 0.3,  // Adjust shadow transparency
+    shadowRadius: 5,     // Adjust shadow blur radius
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  
 },
 videoTitle: {
   fontSize: 18,

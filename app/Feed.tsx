@@ -37,7 +37,8 @@ const uriToBlob = async (uri: string): Promise<Blob> => {
 function Feed() {
   const [image, setImage] = useState<string | null>(null); // Store image URI
   const [cvideo, setVideo] = useState<string | null>(null); // Store image URI
-
+  const [amtLoaded, setamtLoaded] = useState<string | null>(null);
+  const [totalToload, settotalToload] = useState<string | null>(null);
 
   const handlePickVideo = async () => {
     try {
@@ -143,7 +144,34 @@ function Feed() {
           path: `video-submissions/${filename}`,
           // Alternatively, path: ({identityId}) => `album/${identityId}/1.jpg`
           data: blob,
+          options: {
+            onProgress: (progress) => {
+              console.log("Progress object: ", progress); // Log full progress object
+              const { transferredBytes, totalBytes } = progress;
+             
+             
+              if (totalBytes) {
+
+                  setamtLoaded(`Upload progress ${Math.round(
+                    (transferredBytes / totalBytes) * 100
+                  )} %`);
+                
+                console.log(
+                  `Upload progress ${Math.round(
+                    (transferredBytes / totalBytes) * 100
+                  )} %`
+                );
+              }
+            },
+          },
+
+
+
+
         }).result;
+
+
+
         console.log('Succeeded: ', result);
         Alert.alert("File Uplodaed Succesfully");
 
@@ -160,7 +188,7 @@ function Feed() {
             videoId: uuidv4(),
             title: "No Title",
             description: "No Description",
-            videoUrl: `https://amplify-twosecapp-eleva-s-amplifyteamdrivebucket28-fpzgdu4hit7l.s3.us-east-2.amazonaws.com/video-submissions/${filename}`,
+            videoUrl: `https://twosecawasbucketappforme.s3.us-east-2.amazonaws.com/video-submissions/${filename}`,
             ownerId: "bodytree",
           });
         
@@ -204,14 +232,14 @@ function Feed() {
 
   return (
     <View style={styles.container}>
-      <Button title="Select Image" onPress={handlePickImage} />
+      {/* <Button title="Select Image" onPress={handlePickImage} />
       {image && (
         <>
           <Image source={{ uri: image }} style={styles.imagePreview} />
           <Text style={styles.fileName}>Image Selected</Text>
         </>
       )}
-      <Button title="Upload" onPress={handleUpload} disabled={!image} />
+      <Button title="Upload" onPress={handleUpload} disabled={!image} /> */}
 
       <Button title="Select Video" onPress={handlePickVideo} />
       {cvideo && (
@@ -221,6 +249,8 @@ function Feed() {
         </>
       )}
       <Button title="Upload Video" onPress={handleVideoUpload} disabled={!cvideo} />
+      <Text>Uploading: {amtLoaded} / 100%</Text>
+
     </View>
   );
 }

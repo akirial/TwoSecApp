@@ -11,6 +11,7 @@ import Feed from "./app/Feed";
 
 import { Amplify } from 'aws-amplify';
 import outputs from './amplify_outputs.json';
+import Calender from "./app/Calender";
 
 
 Amplify.configure(outputs);
@@ -47,9 +48,11 @@ const App = () => {
   const TabNavigator = () => {
     return (
       <Tab.Navigator initialRouteName="Home">
-        <Tab.Screen name="Feed" component={Feed} />
-        <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Profile" component={LoginScreen} />
+        <Tab.Screen name="Feed" component={Feed} options={{ headerShown: false }}/>
+        <Tab.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
+        <Tab.Screen name="Profile" component={LoginScreen} options={{ headerShown: false }} />
+        <Tab.Screen name="Calender" component={Calender} options={{ headerShown: false }} />
+
       </Tab.Navigator>
     );
   };
@@ -58,9 +61,11 @@ const App = () => {
     <NavigationContainer>
       <Authenticator.Provider>
         <Stack.Navigator initialRouteName="Home">
-          <Stack.Screen name="Home" component={TabNavigator} />
-          <Stack.Screen name="Login" component={LoginScreen} />
-          <Stack.Screen name="Feed" component={Feed} />
+          <Stack.Screen name="Home" component={TabNavigator} options={{ headerShown: false }}/>
+          <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }}/>
+          <Stack.Screen name="Feed" component={Feed} options={{ headerShown: false }}/>
+          <Stack.Screen name="Calender" component={Calender} options={{ headerShown: false }}/>
+
         </Stack.Navigator>
       </Authenticator.Provider>
     </NavigationContainer>
