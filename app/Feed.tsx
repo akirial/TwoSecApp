@@ -28,13 +28,14 @@ const client = generateClient<Schema>();
 
 
 
+
 const uriToBlob = async (uri: string): Promise<Blob> => {
   const response = await fetch(uri);
   const blob = await response.blob();
   return blob;
 };
 
-function Feed() {
+function Feed({ navigation }) {
   const [image, setImage] = useState<string | null>(null); // Store image URI
   const [cvideo, setVideo] = useState<string | null>(null); // Store image URI
   const [amtLoaded, setamtLoaded] = useState<string | null>(null);
@@ -240,6 +241,14 @@ function Feed() {
         </>
       )}
       <Button title="Upload" onPress={handleUpload} disabled={!image} /> */}
+
+<View style={styles.container}>
+      <Text >Welcome to the Feed Screen!</Text>
+
+      {/* Button to navigate to AnotherScreen */}
+      <Button title="Go to Another Screen" onPress={() => navigation.navigate('LocalVideoTrimmer',  { videoUri: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4'})} />
+    </View>
+
 
       <Button title="Select Video" onPress={handlePickVideo} />
       {cvideo && (

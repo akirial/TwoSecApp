@@ -24,3 +24,9 @@ const externalDataSourcesStack = backend.createStack("MyExternalDataSources");
 
 //https://amplify-twosecapp-eleva-s-amplifyteamdrivebucket28-fpzgdu4hit7l.s3.us-east-2.amazonaws.com/video-submissions/video-1732839036270.mp4
 //https://amplify-twosecapp-eleva-s-amplifyteamdrivebucket28-fpzgdu4hit7l.s3.us-east-2.amazonaws.com/video-submissions/video-1732857551188.mp4
+
+
+
+
+
+//const videoUri = route.params?.videoUri; videoUri = videoUri.params?.videoUri; 
