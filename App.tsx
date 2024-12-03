@@ -13,6 +13,8 @@ import outputs from "./amplify_outputs.json";
 import Calender from "./app/Calender";
 import LocalVideoTrimmer from "./app/LocalVideoTrimmer";
 import CommentVideo from "./app/CommentVideo";
+import SignInScreen from "./app/SignInScreen";
+import MyProfile from "./app/MyProfile";
 
 Amplify.configure(outputs);
 
@@ -46,7 +48,7 @@ const App = () => {
         <Tab.Screen name="Upload" component={Feed} options={{ headerShown: false }} />
         <Tab.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
         <Tab.Screen name="Calender" component={Calender} options={{ headerShown: false }} />
-        <Tab.Screen name="Profile" component={LoginScreen} options={{ headerShown: false }} />
+        <Tab.Screen name="Profile" component={MyProfile} options={{ headerShown: false }} />
       </Tab.Navigator>
     );
   };
@@ -60,7 +62,8 @@ const App = () => {
             component={TabNavigator}
             options={{ headerShown: false }}
           />
-          <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="LoginScreen" component={LoginScreen} options={{ headerShown: false, presentation: 'modal'  }} />
+          <Stack.Screen name="SignInScreen" component={SignInScreen} options={{ headerShown: false,  presentation: 'modal' } } />
           <Stack.Screen name="Feed" component={Feed} options={{ headerShown: false }} />
           <Stack.Screen name="Calender" component={Calender} options={{ headerShown: false }} />
           <Stack.Screen name="CommentVideo" component={CommentVideo} options={{ headerShown: false }} />

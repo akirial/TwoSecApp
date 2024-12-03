@@ -1,22 +1,24 @@
 import React, { useState, useEffect } from "react";
-import { View, Button, Text, StyleSheet } from "react-native";
+import { View, Button, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { FlatList, ActivityIndicator } from "react-native";
 import * as DocumentPicker from "expo-document-picker"; // Import from expo-document-picker
 import { Amplify } from "aws-amplify"; // AWS Amplify for uploading
 import amplifyConfig from "../amplify_outputs.json"; // Your amplify config file
 import { Video, ResizeMode } from "expo-av";
+import { BlurView } from "expo-blur"; // Import BlurView for blur effect
 // Initialize Amplify
 import { generateClient } from "aws-amplify/data";
 import { type Schema } from "../amplify/data/resource";
 import Tags from "./Tags";
-
 import outputs from "../amplify_outputs.json";
 import CommentSection from "./CommentSection";
+
 Amplify.configure(outputs);
 
 const client = generateClient<Schema>();
 
 const canFetch = false;
+const uploadies = true; // Change this to control the blur effect
 
 const HomeScreen = ({ navigation }: any) => {
   const [videoList, setVideoList] = useState<any[]>([]);
@@ -104,7 +106,6 @@ const HomeScreen = ({ navigation }: any) => {
     </View>
   );
 
-  // Render a single empty item if canFetch is false
   const emptyItem = (
     <View style={styles.videoItem}>
       <View style={styles.videoHeader}>
@@ -140,16 +141,86 @@ const HomeScreen = ({ navigation }: any) => {
   );
 
   return (
-    <FlatList
-      data={canFetch ? videoList : [null]} // If canFetch is false, pass a dummy empty item
-      renderItem={canFetch ? renderVideoItem : () => emptyItem}
-      keyExtractor={(item, index) => index.toString()} // Use index as key for the empty item
-      contentContainerStyle={styles.list}
-    />
+    <View style={{ flex: 1 }}>
+      {uploadies ? (
+        <FlatList
+          data={canFetch ? videoList : [null]} // If canFetch is false, pass a dummy empty item
+          renderItem={canFetch ? renderVideoItem : () => emptyItem}
+          keyExtractor={(item, index) => index.toString()} // Use index as key for the empty item
+          contentContainerStyle={styles.list}
+        />
+      ) : (
+        // If uploadies is false, show a blurred screen with a button
+        <>
+          <FlatList
+            data={canFetch ? videoList : [null]} // If canFetch is false, pass a dummy empty item
+            renderItem={canFetch ? renderVideoItem : () => emptyItem}
+            keyExtractor={(item, index) => index.toString()} // Use index as key for the empty item
+            contentContainerStyle={styles.list}
+          />
+
+          <View style={styles.blurContainer}>
+            <BlurView intensity={30} style={styles.blurView}>
+              <Text style={styles.blurText}>
+                Post a video today to View Posts
+              </Text>
+
+              <View style={styles.uploadFeed}>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => navigation.navigate("Upload")}
+                >
+                  <Text style={styles.buttonText}>+</Text>
+                </TouchableOpacity>
+                <Text style={styles.uploadText}>Upload Video</Text>
+              </View>
+            </BlurView>
+          </View>
+        </>
+      )}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  buttonText: {
+    color: "rgba(255, 255, 255, 1)",
+    fontSize: 80,
+  },
+  uploadText: {
+    alignSelf: "center",
+    fontSize: 40,
+    marginTop: 8,
+    justifyContent: "center",
+    alignItems: "center",
+    alignContent: "center", textAlign: "center"
+  },
+  button: {
+    backgroundColor: "#000000",
+    padding: 10,
+    margin: 8,
+    height: "60%",
+    shadowColor: "#000000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    alignContent: "center",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  uploadFeed: {
+    alignContent: "center",
+    backgroundColor: "#ffff",
+    height: "45%",
+    width: "50%",
+    shadowColor: "#000000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    
+  },
+
   video: {
     width: "90%", // Adjust to fit your layout
     height: 200, // Set an appropriate height
@@ -157,18 +228,38 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-
-  tag: {
-    padding: 10,
-    borderWidth: 1,
-    borderRadius: 20,
-    backgroundColor: "#00FF00",
-  },
-
   tagcontainer: {
     flexDirection: "row",
   },
-
+  blurContainer: {
+    ...StyleSheet.absoluteFillObject, // This ensures the blur takes up the full screen
+    zIndex: 1, // Bring the blur to the front
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  blurView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+    height: "100%",
+    position: "absolute",
+  },
+  blurText: {
+    fontSize: 30,
+    backgroundColor: "rgba(79, 146, 255, 1)",
+    color: "#fff",
+    marginBottom: 50,
+    borderWidth: 5,
+    width: "70%",
+    borderColor: "rgba(20, 50, 0, 0.7)",
+    borderRadius: 10,
+    padding: 10,
+    shadowColor: "#000000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5, textAlign: "center"
+  },
   loading: {
     flex: 1,
     justifyContent: "center",
@@ -214,7 +305,6 @@ const styles = StyleSheet.create({
     color: "#555",
     textAlign: "center",
   },
-
   dateText: {
     fontStyle: "italic",
     fontSize: 10,
